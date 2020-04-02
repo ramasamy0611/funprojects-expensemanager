@@ -1,5 +1,7 @@
 package com.ram.projects.expensemanager.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.ram.projects.expensemanager.dto.UserDto;
 
+import static com.ram.projects.expensemanager.common.Constants.ROOT_END_POINT;
+
 @RestController
-@RequestMapping("/expmgr")
+@RequestMapping(ROOT_END_POINT+"/user")
 public class UserController {
+   private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-   @GetMapping("/ping/{pong}")
-   public String  ping(@PathVariable("pong") String pong){
-      return pong;
-   }
-
-   @PostMapping(path="/user/add", 
+   @PostMapping(path="/user/add",
                 consumes="application/json",
                 produces="application/json")
    @ResponseBody

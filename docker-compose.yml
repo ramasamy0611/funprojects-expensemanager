@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  expensemanager:
+    container_name: expensemanager 
+    image: expensemanager:snapshot
+    restart: always
+    ports:
+      - "1111:1111"
+
+  postgres:
+    container_name: "postgres"
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example

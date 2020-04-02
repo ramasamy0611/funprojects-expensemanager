@@ -29,6 +29,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: creationdate
+                  type: datetime(6)
+                  constraints:
+                    nullable: fasle
+              - column:
+                  name: modifieddate
+                  type: datetime(6)
+                  constraints:
+                    nullable: false
+              - column:
                   name: comment
                   type: varchar(255)
                   constraints:

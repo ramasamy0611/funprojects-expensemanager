@@ -7,6 +7,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
+/*
+*Basic of swagger
+* //Url to use ----> http://localhost:1111/swagger-ui.html
+* */
 @Configuration
 @EnableSwagger2 //Loads the spring beans required by the framework
 public class SwaggerConfig {

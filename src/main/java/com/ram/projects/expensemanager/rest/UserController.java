@@ -1,35 +1,37 @@
 package com.ram.projects.expensemanager.rest;
 
+import com.ram.projects.expensemanager.db.entity.User;
+import com.ram.projects.expensemanager.db.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import com.ram.projects.expensemanager.dto.UserDto;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.ram.projects.expensemanager.common.Constants.ROOT_END_POINT;
 
 @RestController
-@RequestMapping(ROOT_END_POINT+"/user")
+@RequestMapping(ROOT_END_POINT + "/user")
 public class UserController {
-   private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    @Autowired
+    private UserRepository userRepository;
 
-   @PostMapping(path="/user/add",
-                consumes="application/json",
-                produces="application/json")
-   @ResponseBody
-   public UserDto addAUser(@RequestBody UserDto userDto){
-   //TODO convert Dto  to entity to save
-   //TODO Call userRepo to save the user data
-   //TODO  return saved User data
-return null;
-   }
+//    public UserController(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+
+    @PostMapping(path = "/user/add",
+            consumes = "application/json",
+            produces = "application/json")
+    @ResponseBody
+    public User addAUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
 //TODO Remove user
 //Update user data
- 
+
 }

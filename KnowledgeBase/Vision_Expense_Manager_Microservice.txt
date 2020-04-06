@@ -1,0 +1,32 @@
+
+User Administration:
+    register user
+        - REST endpoint
+        - UI page
+    login as user(admin)
+        - REST endpoint
+        - UI Page
+        - view/Update expense
+Microservices:
+    ExpenseManager
+        - create expensemgr service
+            - add expense
+            - view expense
+    ProductManager
+    NuitritionManager
+    GroceriesManager
+    NewsManager
+    EmailManager
+    TaskManager
+    LearningManager
+
+
+add logging in docker
+
+deploy jenkins in docker
+
+integrate with docker hub
+
+integrate with ELK
+
+integrate with grafana/graphite

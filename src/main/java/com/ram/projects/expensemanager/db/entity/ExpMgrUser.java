@@ -5,14 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
-@Entity
-public class User {
+@Entity(name = "ExpMgrUser")
+@Table(name = "ExpMgrUser")
+public class ExpMgrUser {
     @Id
-    @GeneratedValue(generator = "GEN_SEQ_USER_ID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "GEN_SEQ_USER_ID", sequenceName = "SEQ_USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -24,7 +24,9 @@ public class User {
     private Timestamp creationDate;
     @Column(name = "modifieddate")
     private Timestamp modifiedDate;
-    @Column(name = "comment", nullable = false)
+    @Column(name = "type")
+    private String type;
+    @Column(name = "comment")
     private String comment;
 
     public Long getId() {
@@ -81,5 +83,27 @@ public class User {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpMgrUser{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", eMail='" + eMail + '\'' +
+                ", creationDate=" + creationDate +
+                ", modifiedDate=" + modifiedDate +
+                ", type='" + type + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

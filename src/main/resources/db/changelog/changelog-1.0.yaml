@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: expmgr-1
       author: molair
       changes:
         - createTable:
-            tableName: User
+            tableName: exp_mgr_user
             columns:
               - column:
                   name: id
@@ -39,7 +39,53 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
                   name: comment
                   type: varchar(255)
                   constraints:
                     nullable: true
+                    @Id
+                    @GeneratedValue
+                    private Long Id;
+                    @Column("transaction_date")
+                    private Timestamp transactionDate;
+                    @Column("opening_balance")
+                    private Double openingBalance;
+                    @Column("name")
+                    private String name;
+                    @Column("exepense_category")
+                    private String expenseCategory;
+                    @Column("transactionType")
+                    private String transactionType;
+                    @Column("amount")
+                    private Double amount;
+                    @Column("closing_balance")
+                    private Double closingBalance;
+  - changeSet:
+      id: expmgr-2
+      author: molair
+      changes:
+        - createTable: exp_mgr_expense
+          tableName: exp_mgr_user
+          columns:
+            - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+            - column:
+                name: transaction_date
+                type: datetime(6)
+                consraints:
+                  nullable: false
+            - column:
+                name: opening_balance
+                type: datetime(6)
+                consraints:
+                  nullable: false

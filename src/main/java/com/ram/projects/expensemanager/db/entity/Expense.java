@@ -8,24 +8,26 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "expense")
+@Table(name = "exp_mgr_expense")
 public class Expense {
     @Id
     @GeneratedValue
     private Long Id;
-    @Column("transaction_date")
+    @Column( name = "transaction_date")
     private Timestamp transactionDate;
-    @Column("opening_balance")
+    @Column( name = "opening_balance")
     private Double openingBalance;
-    @Column("name")
-    private String name;
-    @Column("exepense_category")
+    @Column( name = "expense_name")
+    private String expenseName;
+
+    @Column( name = "exepense_category")
     private String expenseCategory;
-    @Column("transactionType")
+
+    @Column( name = "transaction_type")
     private String transactionType;
-    @Column("amount")
-    private Double amount;
-    @Column("closing_balance")
+    @Column( name = "transaction_amount")
+    private Double transactionAmount;
+    @Column( name = "closing_balance")
     private Double closingBalance;
 
     public Long getId() {
@@ -52,12 +54,12 @@ public class Expense {
         this.openingBalance = openingBalance;
     }
 
-    public String getName() {
-        return name;
+    public String getExpenseName() {
+        return expenseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setExpenseName(String expenseName) {
+        this.expenseName = expenseName;
     }
 
     public String getExpenseCategory() {
@@ -76,12 +78,12 @@ public class Expense {
         this.transactionType = transactionType;
     }
 
-    public Double getAmount() {
-        return amount;
+    public Double getTransactionAmount() {
+        return transactionAmount;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setTransactionAmount(Double amount) {
+        this.transactionAmount = amount;
     }
 
     public Double getClosingBalance() {
@@ -98,10 +100,10 @@ public class Expense {
                 "Id=" + Id +
                 ", transactionDate=" + transactionDate +
                 ", openingBalance=" + openingBalance +
-                ", name='" + name + '\'' +
+                ", name='" + expenseName + '\'' +
                 ", expenseCategory='" + expenseCategory + '\'' +
                 ", transactionType='" + transactionType + '\'' +
-                ", amount=" + amount +
+                ", amount=" + transactionAmount +
                 ", closingBalance=" + closingBalance +
                 '}';
     }

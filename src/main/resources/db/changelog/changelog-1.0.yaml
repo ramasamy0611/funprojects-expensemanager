@@ -48,44 +48,53 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: true
-                    @Id
-                    @GeneratedValue
-                    private Long Id;
-                    @Column("transaction_date")
-                    private Timestamp transactionDate;
-                    @Column("opening_balance")
-                    private Double openingBalance;
-                    @Column("name")
-                    private String name;
-                    @Column("exepense_category")
-                    private String expenseCategory;
-                    @Column("transactionType")
-                    private String transactionType;
-                    @Column("amount")
-                    private Double amount;
-                    @Column("closing_balance")
-                    private Double closingBalance;
+
   - changeSet:
       id: expmgr-2
       author: molair
       changes:
-        - createTable: exp_mgr_expense
-          tableName: exp_mgr_user
-          columns:
-            - column:
-                  name: id
-                  type: int
-                  autoIncrement: true
+        - createTable:
+            tableName: exp_mgr_expense
+            columns:
+              - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+              - column:
+                  name: transaction_date
+                  type: datetime(6)
                   constraints:
-                    primaryKey: true
                     nullable: false
-            - column:
-                name: transaction_date
-                type: datetime(6)
-                consraints:
-                  nullable: false
-            - column:
-                name: opening_balance
-                type: datetime(6)
-                consraints:
-                  nullable: false
+              - column:
+                  name: opening_balance
+                  type: NUMERIC(10, 8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expense_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: exepense_category
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_amount
+                  type: NUMERIC(10, 8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: closing_balance
+                  type: NUMERIC(10, 8)
+                  constraints:
+                    nullable: false

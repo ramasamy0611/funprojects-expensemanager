@@ -1,5 +1,5 @@
 register user - REST endpoint
-register user - UI page
+register user - UI page -- on going (Angular)
 login as user(admin) - REST endpoint
 login as user(admin) - UI Page
 create expensemgr service

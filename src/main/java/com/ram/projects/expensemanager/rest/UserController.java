@@ -28,7 +28,7 @@ public class UserController {
             consumes = "application/json",
             produces = "application/json")
     @ResponseBody
-    public CompletableFuture<ExpMgrUser> addAUser(@RequestBody ExpMgrUser expMgrUser) {
+    public CompletableFuture<ExpMgrUser> addUser(@RequestBody ExpMgrUser expMgrUser) {
         LOGGER.info("ExpMgrUser {}",expMgrUser);
         return userManager.addUser(expMgrUser)
                 .exceptionally(throwable -> handleFailure("Something went wrong while adding users to the database", throwable));

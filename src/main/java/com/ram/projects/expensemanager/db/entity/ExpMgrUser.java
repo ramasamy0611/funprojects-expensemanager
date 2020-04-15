@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Entity(name = "ExpMgrUser")
-@Table(name = "ExpMgrUser")
+@Table(name = "exp_mgr_user")
 public class ExpMgrUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

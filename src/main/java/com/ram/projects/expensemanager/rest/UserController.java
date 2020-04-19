@@ -1,16 +1,16 @@
 package com.ram.projects.expensemanager.rest;
 
-import com.ram.projects.expensemanager.db.entity.ExpMgrUser;
 import com.ram.projects.expensemanager.domain.user.IUserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.CompletableFuture;
 
 import static com.ram.projects.expensemanager.common.Constants.ROOT_END_POINT;
 
@@ -24,20 +24,28 @@ public class UserController {
         this.userManager = userManager;
     }
 
-    @PostMapping(path = "/user/add",
+    @PostMapping(path = "/add",
             consumes = "application/json",
             produces = "application/json")
-    @ResponseBody
-    public CompletableFuture<String> addUser(@RequestBody ExpMgrUser expMgrUser) {
-        LOGGER.info("ExpMgrUser {}", expMgrUser);
-        return userManager.addUser(expMgrUser)
-                .thenApply(expMgrUser1 -> "{Success:True}")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        LOGGER.info("[ExpMgrUser:] addUser {}", user);
+        return ResponseEntity
+                .ok()
+                .body(user);
+        /*return userManager.addUser(user)
+                .thenApply(expMgrUser1 -> ResponseEntity
+                        .ok()
+                        .headers(responseHeaders)
+                        .body("{Success:True}"))
                 .exceptionally(throwable -> handleFailure("Something went wrong while adding users to the database", throwable));
+    */
     }
 
-    private String handleFailure(String message, Throwable throwable) {
+    private ResponseEntity<String> handleFailure(String message, Throwable throwable) {
         LOGGER.error(message, throwable);
-        return "{Failed:true}";
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("{Failed:true}");
     }
 //TODO Remove user
 //Update user data

@@ -28,15 +28,16 @@ public class UserController {
             consumes = "application/json",
             produces = "application/json")
     @ResponseBody
-    public CompletableFuture<ExpMgrUser> addUser(@RequestBody ExpMgrUser expMgrUser) {
-        LOGGER.info("ExpMgrUser {}",expMgrUser);
+    public CompletableFuture<String> addUser(@RequestBody ExpMgrUser expMgrUser) {
+        LOGGER.info("ExpMgrUser {}", expMgrUser);
         return userManager.addUser(expMgrUser)
+                .thenApply(expMgrUser1 -> "{Success:True}")
                 .exceptionally(throwable -> handleFailure("Something went wrong while adding users to the database", throwable));
     }
 
-    private ExpMgrUser handleFailure(String message, Throwable throwable) {
+    private String handleFailure(String message, Throwable throwable) {
         LOGGER.error(message, throwable);
-        return null;
+        return "{Failed:true}";
     }
 //TODO Remove user
 //Update user data

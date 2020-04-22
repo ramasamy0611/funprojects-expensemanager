@@ -98,3 +98,13 @@ databaseChangeLog:
                   type: NUMERIC(10, 8)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: expmgr-3
+      author: molair
+      changes:
+        - addUniqueConstraint:
+            columnNames: first_name, last_name, email
+            constraintName: UNIQUE_USER
+            schemaName: expmgr1
+            tableName: exp_mgr_user
+            validate: true

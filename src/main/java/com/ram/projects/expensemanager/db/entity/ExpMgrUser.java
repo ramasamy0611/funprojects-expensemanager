@@ -19,7 +19,7 @@ public class ExpMgrUser {
     @Column(name = "last_name", nullable = false)
     private String lastName;
     @Column(name = "email", nullable = false)
-    private String eMail;
+    private String email;
     @Column(name = "creationdate")
     private Timestamp creationDate;
     @Column(name = "modifieddate")
@@ -31,10 +31,6 @@ public class ExpMgrUser {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -53,12 +49,12 @@ public class ExpMgrUser {
         this.lastName = lastName;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String geteEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void seteEmail(String eMail) {
+        this.email = eMail;
     }
 
     public Timestamp getCreationDate() {
@@ -99,7 +95,7 @@ public class ExpMgrUser {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", eMail='" + eMail + '\'' +
+                ", eMail='" + email + '\'' +
                 ", creationDate=" + creationDate +
                 ", modifiedDate=" + modifiedDate +
                 ", type='" + type + '\'' +

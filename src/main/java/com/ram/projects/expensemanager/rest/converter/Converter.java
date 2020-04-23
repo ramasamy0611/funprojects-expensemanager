@@ -1,4 +1,4 @@
-package com.ram.projects.expensemanager.rest.process;
+package com.ram.projects.expensemanager.rest.converter;
 
 @FunctionalInterface
 public interface Converter<I, O> {

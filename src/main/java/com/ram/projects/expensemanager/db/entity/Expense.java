@@ -1,110 +1,120 @@
 package com.ram.projects.expensemanager.db.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "exp_mgr_expense")
 public class Expense {
-    @Id
-    @GeneratedValue
-    private Long Id;
-    @Column( name = "transaction_date")
-    private Timestamp transactionDate;
-    @Column( name = "opening_balance")
-    private Double openingBalance;
-    @Column( name = "expense_name")
-    private String expenseName;
+  @Id @GeneratedValue private Long Id;
 
-    @Column( name = "exepense_category")
-    private String expenseCategory;
+  @Column(name = "transaction_date")
+  private Timestamp transactionDate;
 
-    @Column( name = "transaction_type")
-    private String transactionType;
-    @Column( name = "transaction_amount")
-    private Double transactionAmount;
-    @Column( name = "closing_balance")
-    private Double closingBalance;
+  @Column(name = "opening_balance")
+  private Double openingBalance;
 
-    public Long getId() {
-        return Id;
-    }
+  @Column(name = "expense_name")
+  private String expenseName;
 
-    public void setId(Long id) {
-        Id = id;
-    }
+  @Column(name = "exepense_category")
+  private String expenseCategory;
 
-    public Timestamp getTransactionDate() {
-        return transactionDate;
-    }
+  @Column(name = "transaction_type")
+  private String transactionType;
 
-    public void setTransactionDate(Timestamp transactionDate) {
-        this.transactionDate = transactionDate;
-    }
+  @Column(name = "transaction_amount")
+  private Double transactionAmount;
 
-    public Double getOpeningBalance() {
-        return openingBalance;
-    }
+  @Column(name = "closing_balance")
+  private Double closingBalance;
 
-    public void setOpeningBalance(Double openingBalance) {
-        this.openingBalance = openingBalance;
-    }
+  public Long getId() {
+    return Id;
+  }
 
-    public String getExpenseName() {
-        return expenseName;
-    }
+  public void setId(Long id) {
+    Id = id;
+  }
 
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
-    }
+  public Timestamp getTransactionDate() {
+    return transactionDate;
+  }
 
-    public String getExpenseCategory() {
-        return expenseCategory;
-    }
+  public void setTransactionDate(Timestamp transactionDate) {
+    this.transactionDate = transactionDate;
+  }
 
-    public void setExpenseCategory(String expenseCategory) {
-        this.expenseCategory = expenseCategory;
-    }
+  public Double getOpeningBalance() {
+    return openingBalance;
+  }
 
-    public String getTransactionType() {
-        return transactionType;
-    }
+  public void setOpeningBalance(Double openingBalance) {
+    this.openingBalance = openingBalance;
+  }
 
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
+  public String getExpenseName() {
+    return expenseName;
+  }
 
-    public Double getTransactionAmount() {
-        return transactionAmount;
-    }
+  public void setExpenseName(String expenseName) {
+    this.expenseName = expenseName;
+  }
 
-    public void setTransactionAmount(Double amount) {
-        this.transactionAmount = amount;
-    }
+  public String getExpenseCategory() {
+    return expenseCategory;
+  }
 
-    public Double getClosingBalance() {
-        return closingBalance;
-    }
+  public void setExpenseCategory(String expenseCategory) {
+    this.expenseCategory = expenseCategory;
+  }
 
-    public void setClosingBalance(Double closingBalance) {
-        this.closingBalance = closingBalance;
-    }
+  public String getTransactionType() {
+    return transactionType;
+  }
 
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "Id=" + Id +
-                ", transactionDate=" + transactionDate +
-                ", openingBalance=" + openingBalance +
-                ", name='" + expenseName + '\'' +
-                ", expenseCategory='" + expenseCategory + '\'' +
-                ", transactionType='" + transactionType + '\'' +
-                ", amount=" + transactionAmount +
-                ", closingBalance=" + closingBalance +
-                '}';
-    }
+  public void setTransactionType(String transactionType) {
+    this.transactionType = transactionType;
+  }
+
+  public Double getTransactionAmount() {
+    return transactionAmount;
+  }
+
+  public void setTransactionAmount(Double amount) {
+    this.transactionAmount = amount;
+  }
+
+  public Double getClosingBalance() {
+    return closingBalance;
+  }
+
+  public void setClosingBalance(Double closingBalance) {
+    this.closingBalance = closingBalance;
+  }
+
+  @Override
+  public String toString() {
+    return "Expense{"
+        + "Id="
+        + Id
+        + ", transactionDate="
+        + transactionDate
+        + ", openingBalance="
+        + openingBalance
+        + ", name='"
+        + expenseName
+        + '\''
+        + ", expenseCategory='"
+        + expenseCategory
+        + '\''
+        + ", transactionType='"
+        + transactionType
+        + '\''
+        + ", amount="
+        + transactionAmount
+        + ", closingBalance="
+        + closingBalance
+        + '}';
+  }
 }

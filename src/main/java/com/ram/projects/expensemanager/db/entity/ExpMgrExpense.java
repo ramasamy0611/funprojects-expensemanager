@@ -1,11 +1,13 @@
 package com.ram.projects.expensemanager.db.entity;
 
+import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "exp_mgr_expense")
-public class Expense {
+public class ExpMgrExpense {
   @Id @GeneratedValue private Long Id;
 
   @Column(name = "transaction_date")
@@ -18,7 +20,8 @@ public class Expense {
   private String expenseName;
 
   @Column(name = "exepense_category")
-  private String expenseCategory;
+  @Enumerated(EnumType.STRING)
+  private ExpenseCategory expenseCategory;
 
   @Column(name = "transaction_type")
   private String transactionType;
@@ -61,11 +64,11 @@ public class Expense {
     this.expenseName = expenseName;
   }
 
-  public String getExpenseCategory() {
+  public ExpenseCategory getExpenseCategory() {
     return expenseCategory;
   }
 
-  public void setExpenseCategory(String expenseCategory) {
+  public void setExpenseCategory(ExpenseCategory expenseCategory) {
     this.expenseCategory = expenseCategory;
   }
 

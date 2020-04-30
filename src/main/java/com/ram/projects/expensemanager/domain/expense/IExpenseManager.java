@@ -1,17 +1,17 @@
 package com.ram.projects.expensemanager.domain.expense;
 
-import com.ram.projects.expensemanager.db.entity.Expense;
+import com.ram.projects.expensemanager.db.entity.ExpMgrExpense;
 
 import java.util.List;
 
 public interface IExpenseManager {
-  Integer addExpense(Expense expense);
+  Long addExpense(ExpMgrExpense expMgrExpense);
 
-  Expense getExpenseById(Integer expenseId);
+  ExpMgrExpense getExpenseById(Long expenseId);
 
-  Integer updateExpense(Expense expense);
+  Long updateExpense(ExpMgrExpense expMgrExpense);
 
-  List<Integer> updateExpense(List<Expense> expense);
+  List<Long> updateExpense(List<ExpMgrExpense> expMgrExpense);
 
-  Integer deleteExpense(Expense expense);
+  Long deleteExpense(ExpMgrExpense expMgrExpense);
 }

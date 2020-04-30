@@ -1,7 +1,7 @@
 package com.ram.projects.expensemanager.rest.converter;
 
 import com.ram.projects.expensemanager.db.entity.ExpMgrUser;
-import com.ram.projects.expensemanager.rest.User;
+import com.ram.projects.expensemanager.rest.dto.User;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,2 +1,2 @@
 # funprojects-expensemanager
-Expense manager to collect the data of home expenses
+Expense manager to collect the data of home expens

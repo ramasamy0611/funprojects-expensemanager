@@ -3,5 +3,5 @@ register user - UI page -- on going (Angular)
 login as user(admin) - REST endpoint
 login as user(admin) - UI Page
 create expensemgr service
-    add expense
-    view expense
+    add expMgrExpense
+    view expMgrExpense

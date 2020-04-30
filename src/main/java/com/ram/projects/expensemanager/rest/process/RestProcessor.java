@@ -15,7 +15,30 @@ import java.util.function.Function;
 @Service
 public class RestProcessor<T, R, I, O> {
   private static final Logger LOGGER = LoggerFactory.getLogger(RestProcessor.class);
+  public CompletableFuture<ResponseEntity<T>> process(
+          String apiName,
+          T inputEntity,
+          Converter<T, O> inputConverter,
+          Converter<R, T> outputConverter,
+          Function<O, CompletableFuture<R>> handler) {
+    Objects.requireNonNull(apiName.strip(), "Api Name cannot be blank");
+    Objects.requireNonNull(inputEntity, "HttpEntity cannot null");
+    Objects.requireNonNull(inputConverter, "InputConverter cannot null");
+    Objects.requireNonNull(inputEntity, "OutputConverter cannot null");
+    Objects.requireNonNull(inputEntity, "Handler cannot null");
 
+    LOGGER.info("[RestProcessor:] api invoked - START:{}", apiName);
+    return CompletableFuture.completedFuture(inputConverter.convert(inputEntity))
+            .thenCompose(handler::apply)
+            .thenApply(outputConverter::convert)
+            .thenApply(this::prepareResponse)
+            .thenApply(
+                    respData -> {
+                      LOGGER.info("[RestProcessor:] api invoked - END :{}", apiName);
+                      return respData;
+                    })
+            .exceptionally(this::prepareResponse);
+  }
   public CompletableFuture<ResponseEntity<T>> process(
       String apiName,
       HttpEntity<T> inputEntity,
@@ -30,7 +53,7 @@ public class RestProcessor<T, R, I, O> {
 
     LOGGER.info("[RestProcessor:] api invoked - START:{}", apiName);
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity.getBody()))
-        .thenCompose((O t) -> handler.apply(t))
+        .thenCompose(handler::apply)
         .thenApply(outputConverter::convert)
         .thenApply(this::prepareResponse)
         .thenApply(

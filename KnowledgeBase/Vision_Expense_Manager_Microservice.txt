@@ -6,12 +6,12 @@ User Administration:
     login as user(admin)
         - REST endpoint
         - UI Page
-        - view/Update expense
+        - view/Update expMgrExpense
 Microservices:
     ExpenseManager
         - create expensemgr service
-            - add expense
-            - view expense
+            - add expMgrExpense
+            - view expMgrExpense
     ProductManager
     NuitritionManager
     GroceriesManager

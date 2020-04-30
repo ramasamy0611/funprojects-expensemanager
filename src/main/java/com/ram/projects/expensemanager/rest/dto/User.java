@@ -1,4 +1,4 @@
-package com.ram.projects.expensemanager.rest;
+package com.ram.projects.expensemanager.rest.dto;
 
 public class User {
     private long id;

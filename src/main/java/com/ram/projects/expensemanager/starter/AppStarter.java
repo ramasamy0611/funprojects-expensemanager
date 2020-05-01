@@ -13,11 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.ram.projects.expensemanager.db.entity"})
 @ComponentScan(basePackages = {"com.ram.projects.expensemanager"})
 public class AppStarter {
-    public static void main(String[] args) {
-        SpringApplication.run(AppStarter.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(AppStarter.class, args);
+  }
 }
-
-
-
-

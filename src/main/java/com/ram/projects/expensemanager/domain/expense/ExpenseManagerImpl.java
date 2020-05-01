@@ -77,8 +77,13 @@ public class ExpenseManagerImpl implements IExpenseManager {
   }
 
   @Override
-  public ExpMgrExpense getExpenseById(Long expenseId) {
-    return expenseRepository.getOne(expenseId);
+  public CompletableFuture<ExpMgrExpense> getExpenseById(Long expenseId) {
+    return CompletableFuture.supplyAsync(() -> expenseRepository.getOne(expenseId), executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getAllExpenses() {
+    return CompletableFuture.supplyAsync(() -> expenseRepository.findAll(), executor);
   }
 
   @Override

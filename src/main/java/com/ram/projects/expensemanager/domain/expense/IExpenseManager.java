@@ -8,7 +8,9 @@ import java.util.concurrent.CompletableFuture;
 public interface IExpenseManager {
   CompletableFuture<Long> addExpense(ExpMgrExpense expMgrExpense);
 
-  ExpMgrExpense getExpenseById(Long expenseId);
+  CompletableFuture<ExpMgrExpense> getExpenseById(Long expenseId);
+
+  CompletableFuture<List<ExpMgrExpense>> getAllExpenses();
 
   Long updateExpense(ExpMgrExpense expMgrExpense);
 

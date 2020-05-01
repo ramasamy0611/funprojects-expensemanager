@@ -16,9 +16,9 @@ public class ExpenseInputConverter implements Converter<Expense, ExpMgrExpense> 
     expMgrExpense.setExpenseName(expenseToBeAdded.getExpenseName());
     expMgrExpense.setClosingBalance(expenseToBeAdded.getClosingBalance());
     expMgrExpense.setTransactionAmount(expenseToBeAdded.getTransactionAmount());
-    expMgrExpense.setTransactionDate(
-        Timestamp.from(expenseToBeAdded.getTransactionDate().toInstant()));
+    expMgrExpense.setTransactionDate(Timestamp.from(expenseToBeAdded.getTransactionDate()));
     expMgrExpense.setTransactionType(expenseToBeAdded.getTransactionType());
+    expMgrExpense.setTransactionSource(expenseToBeAdded.getTransactionSource());
     return expMgrExpense;
   }
 }

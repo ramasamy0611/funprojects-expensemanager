@@ -1,6 +1,9 @@
 package com.ram.projects.expensemanager.db.entity;
 
 import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
+import com.ram.projects.expensemanager.domain.expense.constants.ExpenseName;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionSource;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -19,14 +22,20 @@ public class ExpMgrExpense {
   private Double openingBalance;
 
   @Column(name = "expense_name")
-  private String expenseName;
+  @Enumerated(EnumType.STRING)
+  private ExpenseName expenseName;
 
-  @Column(name = "exepense_category")
+  @Column(name = "expense_category")
   @Enumerated(EnumType.STRING)
   private ExpenseCategory expenseCategory;
 
   @Column(name = "transaction_type")
-  private String transactionType;
+  @Enumerated(EnumType.STRING)
+  private TransactionType transactionType;
+
+  @Column(name = "transaction_source")
+  @Enumerated(EnumType.STRING)
+  private TransactionSource transactionSource;
 
   @Column(name = "transaction_amount")
   private Double transactionAmount;
@@ -58,28 +67,12 @@ public class ExpMgrExpense {
     this.openingBalance = openingBalance;
   }
 
-  public String getExpenseName() {
-    return expenseName;
-  }
-
-  public void setExpenseName(String expenseName) {
-    this.expenseName = expenseName;
-  }
-
   public ExpenseCategory getExpenseCategory() {
     return expenseCategory;
   }
 
   public void setExpenseCategory(ExpenseCategory expenseCategory) {
     this.expenseCategory = expenseCategory;
-  }
-
-  public String getTransactionType() {
-    return transactionType;
-  }
-
-  public void setTransactionType(String transactionType) {
-    this.transactionType = transactionType;
   }
 
   public Double getTransactionAmount() {
@@ -98,25 +91,48 @@ public class ExpMgrExpense {
     this.closingBalance = closingBalance;
   }
 
+  public ExpenseName getExpenseName() {
+    return expenseName;
+  }
+
+  public void setExpenseName(ExpenseName expenseName) {
+    this.expenseName = expenseName;
+  }
+
+  public TransactionType getTransactionType() {
+    return transactionType;
+  }
+
+  public void setTransactionType(TransactionType transactionType) {
+    this.transactionType = transactionType;
+  }
+
+  public TransactionSource getTransactionSource() {
+    return transactionSource;
+  }
+
+  public void setTransactionSource(TransactionSource transactionSource) {
+    this.transactionSource = transactionSource;
+  }
+
   @Override
   public String toString() {
-    return "Expense{"
+    return "ExpMgrExpense{"
         + "Id="
         + Id
         + ", transactionDate="
         + transactionDate
         + ", openingBalance="
         + openingBalance
-        + ", name='"
+        + ", expenseName="
         + expenseName
-        + '\''
-        + ", expenseCategory='"
+        + ", expenseCategory="
         + expenseCategory
-        + '\''
-        + ", transactionType='"
+        + ", transactionType="
         + transactionType
-        + '\''
-        + ", amount="
+        + ", transactionSource="
+        + transactionSource
+        + ", transactionAmount="
         + transactionAmount
         + ", closingBalance="
         + closingBalance

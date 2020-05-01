@@ -1,6 +1,6 @@
 package com.ram.projects.expensemanager.domain.expense.constants;
 
-public enum ExpenseSource {
+public enum TransactionSource {
   CREDIT_CARD,
   DEBIT_CARD,
   UPI,

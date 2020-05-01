@@ -57,12 +57,12 @@ databaseChangeLog:
             tableName: exp_mgr_expense
             columns:
               - column:
-                    name: id
-                    type: int
-                    autoIncrement: true
-                    constraints:
-                      primaryKey: true
-                      nullable: false
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: transaction_date
                   type: datetime(6)
@@ -79,12 +79,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: exepense_category
+                  name: expense_category
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: transaction_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_source
                   type: varchar(255)
                   constraints:
                     nullable: false

@@ -13,6 +13,10 @@ public class CommonUtils {
     Objects.requireNonNull(date, "Date type data cannot be empty");
   }
 
+  public static void validateIfNull(Double doubleValue) {
+    Objects.requireNonNull(doubleValue, "Double data cannot be empty");
+  }
+
   public static void validateIfNull(String string) {
     if (isBlank(string)) {
       throw new NullPointerException("String cannot be empty");
@@ -30,9 +34,11 @@ public class CommonUtils {
   public static boolean isNull(String string) {
     return string == null;
   }
+
   public static <T> boolean isNull(T object) {
     return object == null;
   }
+
   public static boolean isNull(Integer integer) {
     return integer == null;
   }

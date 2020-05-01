@@ -61,9 +61,9 @@ public class ExpenseManagerImpl implements IExpenseManager {
 
   private ExpMgrExpense populateClosingAndOpeningBalanceFromCurrentData(
       ExpMgrExpense expMgrExpenseToBeAdded) {
+    expMgrExpenseToBeAdded.setOpeningBalance(expMgrExpenseToBeAdded.getClosingBalance());
     expMgrExpenseToBeAdded.setClosingBalance(
         expMgrExpenseToBeAdded.getOpeningBalance() - expMgrExpenseToBeAdded.getTransactionAmount());
-    expMgrExpenseToBeAdded.setOpeningBalance(expMgrExpenseToBeAdded.getClosingBalance());
     return expMgrExpenseToBeAdded;
   }
 

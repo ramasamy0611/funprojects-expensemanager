@@ -4,7 +4,6 @@ import com.ram.projects.expensemanager.db.entity.ExpMgrExpense;
 import com.ram.projects.expensemanager.rest.dto.Expense;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +23,9 @@ public class ExpensesOutputConverter implements Converter<List<ExpMgrExpense>, L
     expense.setExpenseName(expMgrExpense.getExpenseName());
     expense.setClosingBalance(expMgrExpense.getClosingBalance());
     expense.setTransactionAmount(expMgrExpense.getTransactionAmount());
-    expense.setTransactionDate(Timestamp.from(expMgrExpense.getTransactionDate().toInstant()));
+    expense.setTransactionDate(expMgrExpense.getTransactionDate().toInstant());
     expense.setTransactionType(expMgrExpense.getTransactionType());
+    expense.setTransactionSource(expMgrExpense.getTransactionSource());
     return expense;
   }
 }

@@ -1,9 +1,11 @@
 package com.ram.projects.expensemanager.rest.dto;
 
 import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
+import com.ram.projects.expensemanager.domain.expense.constants.ExpenseName;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionSource;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionType;
 
 import java.time.Instant;
-import java.util.Date;
 
 import static com.ram.projects.expensemanager.common.CommonUtils.validateIfNull;
 
@@ -12,11 +14,13 @@ public class Expense {
 
   private Double openingBalance;
 
-  private String expenseName;
+  private ExpenseName expenseName;
 
   private ExpenseCategory expenseCategory;
 
-  private String transactionType;
+  private TransactionType transactionType;
+
+  private TransactionSource transactionSource;
 
   private Double transactionAmount;
 
@@ -25,9 +29,10 @@ public class Expense {
   public Expense(
       Instant transactionDate,
       Double openingBalance,
-      String expenseName,
+      ExpenseName expenseName,
       ExpenseCategory expenseCategory,
-      String transactionType,
+      TransactionType transactionType,
+      TransactionSource transactionSource,
       Double transactionAmount,
       Double closingBalance) {
     this.transactionDate = transactionDate;
@@ -35,27 +40,22 @@ public class Expense {
     this.expenseName = expenseName;
     this.expenseCategory = expenseCategory;
     this.transactionType = transactionType;
+    this.transactionSource = transactionSource;
     this.transactionAmount = transactionAmount;
     this.closingBalance = closingBalance;
   }
 
   public Expense() {}
 
-  public Date getTransactionDate() {
-    return new Date(transactionDate.toEpochMilli());
+  public Instant getTransactionDate() {
+    if (this.transactionDate == null) {
+      return Instant.now();
+    }
+    return this.transactionDate;
   }
 
-  public Instant getTransactionTime() {
-    return transactionDate;
-  }
-
-  public void setTransactionTime(Instant transactionDate) {
+  public void setTransactionDate(Instant transactionDate) {
     this.transactionDate = transactionDate;
-  }
-
-  public void setTransactionDate(Date transactionDate) {
-    validateIfNull(transactionDate);
-    this.transactionDate = transactionDate.toInstant();
   }
 
   public Double getOpeningBalance() {
@@ -66,11 +66,11 @@ public class Expense {
     this.openingBalance = openingBalance;
   }
 
-  public String getExpenseName() {
+  public ExpenseName getExpenseName() {
     return expenseName;
   }
 
-  public void setExpenseName(String expenseName) {
+  public void setExpenseName(ExpenseName expenseName) {
     this.expenseName = expenseName;
   }
 
@@ -82,15 +82,16 @@ public class Expense {
     this.expenseCategory = expenseCategory;
   }
 
-  public String getTransactionType() {
+  public TransactionType getTransactionType() {
     return transactionType;
   }
 
-  public void setTransactionType(String transactionType) {
+  public void setTransactionType(TransactionType transactionType) {
     this.transactionType = transactionType;
   }
 
   public Double getTransactionAmount() {
+    validateIfNull(this.transactionAmount);
     return transactionAmount;
   }
 
@@ -99,11 +100,22 @@ public class Expense {
   }
 
   public Double getClosingBalance() {
-    return closingBalance;
+    if (this.closingBalance == null){
+      this.closingBalance = 0D;
+    }
+    return this.closingBalance;
   }
 
   public void setClosingBalance(Double closingBalance) {
     this.closingBalance = closingBalance;
+  }
+
+  public TransactionSource getTransactionSource() {
+    return transactionSource;
+  }
+
+  public void setTransactionSource(TransactionSource transactionSource) {
+    this.transactionSource = transactionSource;
   }
 
   @Override
@@ -113,15 +125,14 @@ public class Expense {
         + transactionDate
         + ", openingBalance="
         + openingBalance
-        + ", expenseName='"
+        + ", expenseName="
         + expenseName
-        + '\''
-        + ", expenseCategory='"
+        + ", expenseCategory="
         + expenseCategory
-        + '\''
-        + ", transactionType='"
+        + ", transactionType="
         + transactionType
-        + '\''
+        + ", transactionSource="
+        + transactionSource
         + ", transactionAmount="
         + transactionAmount
         + ", closingBalance="

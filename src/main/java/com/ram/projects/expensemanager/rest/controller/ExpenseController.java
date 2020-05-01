@@ -5,7 +5,7 @@ import com.ram.projects.expensemanager.domain.expense.IExpenseManager;
 import com.ram.projects.expensemanager.rest.converter.ExpenseInputConverter;
 import com.ram.projects.expensemanager.rest.converter.ExpenseOutputConverter;
 import com.ram.projects.expensemanager.rest.dto.Expense;
-import com.ram.projects.expensemanager.rest.process.RestProcessor;
+import com.ram.projects.expensemanager.rest.process.rest.RestProcessor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

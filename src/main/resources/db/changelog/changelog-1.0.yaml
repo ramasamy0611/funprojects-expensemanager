@@ -70,7 +70,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: opening_balance
-                  type: NUMERIC(10, 8)
+                  type: NUMERIC(18, 2)
                   constraints:
                     nullable: false
               - column:
@@ -90,12 +90,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: transaction_amount
-                  type: NUMERIC(10, 8)
+                  type: NUMERIC(18, 2)
                   constraints:
                     nullable: false
               - column:
                   name: closing_balance
-                  type: NUMERIC(10, 8)
+                  type: NUMERIC(18, 2)
                   constraints:
                     nullable: false
   - changeSet:

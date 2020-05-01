@@ -8,7 +8,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "exp_mgr_expense")
 public class ExpMgrExpense {
-  @Id @GeneratedValue private Long Id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long Id;
 
   @Column(name = "transaction_date")
   private Timestamp transactionDate;

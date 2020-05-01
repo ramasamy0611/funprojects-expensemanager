@@ -1,4 +1,4 @@
-package com.ram.projects.expensemanager.rest.process;
+package com.ram.projects.expensemanager.rest.process.rest;
 
 import com.ram.projects.expensemanager.rest.converter.Converter;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class RestProcessor<T, R, I, O> {
 
     LOGGER.info("[RestProcessor:] api invoked - START:{}", apiName);
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity))
-            .thenCompose(handler::apply)
+            .thenCompose(handler)
             .thenApply(outputConverter::convert)
             .thenApply(this::prepareResponse)
             .thenApply(
@@ -53,7 +53,7 @@ public class RestProcessor<T, R, I, O> {
 
     LOGGER.info("[RestProcessor:] api invoked - START:{}", apiName);
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity.getBody()))
-        .thenCompose(handler::apply)
+        .thenCompose(handler)
         .thenApply(outputConverter::convert)
         .thenApply(this::prepareResponse)
         .thenApply(

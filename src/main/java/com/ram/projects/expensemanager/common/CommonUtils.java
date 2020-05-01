@@ -30,7 +30,9 @@ public class CommonUtils {
   public static boolean isNull(String string) {
     return string == null;
   }
-
+  public static <T> boolean isNull(T object) {
+    return object == null;
+  }
   public static boolean isNull(Integer integer) {
     return integer == null;
   }

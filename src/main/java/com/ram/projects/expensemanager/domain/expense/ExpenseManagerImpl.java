@@ -2,11 +2,18 @@ package com.ram.projects.expensemanager.domain.expense;
 
 import com.ram.projects.expensemanager.db.entity.ExpMgrExpense;
 import com.ram.projects.expensemanager.db.repo.ExpenseRepository;
+import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
+import com.ram.projects.expensemanager.domain.expense.constants.ExpenseName;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionSource;
+import com.ram.projects.expensemanager.domain.expense.constants.TransactionType;
+import com.ram.projects.expensemanager.exception.ExpenseNotFoundException;
 import com.ram.projects.expensemanager.rest.process.rest.RestProcessorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class ExpenseManagerImpl implements IExpenseManager {
   private static final Logger LOG = LoggerFactory.getLogger(ExpenseManagerImpl.class);
-  private static final String LOG_HANDLE = "[ExpenseManagerImpl :]";
+  private static final String LOG_HANDLE = "[ExpenseManagerImpl :] ";
   private ExpenseRepository expenseRepository;
   private Executor executor = RestProcessorUtil.getExecutor();
 
@@ -30,6 +37,98 @@ public class ExpenseManagerImpl implements IExpenseManager {
     return populateClosingAndOpeningBalanceFromLatest(expMgrExpenseToBoAdded)
         .thenCompose(expMgrExpenseUpdated -> addExpenseToDB(expMgrExpenseUpdated))
         .thenApply(expMgrExpense -> expMgrExpense.getId());
+  }
+
+  @Override
+  public CompletableFuture<List<Long>> addExpense(List<ExpMgrExpense> expMgrExpensesToBeAdded) {
+    return addExpenses(expMgrExpensesToBeAdded)
+        .thenApply(expMgrExpenses -> extractExpenseIds(expMgrExpenses));
+  }
+
+  private List<Long> extractExpenseIds(List<ExpMgrExpense> expMgrExpenses) {
+    return expMgrExpenses
+        .parallelStream()
+        .map(expMgrExpense -> expMgrExpense.getId())
+        .collect(Collectors.toList());
+  }
+
+  private CompletableFuture<List<ExpMgrExpense>> addExpenses(List<ExpMgrExpense> expMgrExpenses) {
+    return CompletableFuture.supplyAsync(() -> expenseRepository.saveAll(expMgrExpenses), executor);
+  }
+
+  @Override
+  public CompletableFuture<ExpMgrExpense> getExpenseById(Long expenseId) {
+    return CompletableFuture.supplyAsync(() -> expenseRepository.getOne(expenseId), executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getAllExpenses() {
+    return CompletableFuture.supplyAsync(() -> expenseRepository.findAll(), executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesByTransactionDate(Instant instant) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findByTransactionDate(Timestamp.from(instant))
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesBetweenTransactionDates(
+      Instant dateFrom, Instant dateTo) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findAllByTransactionDateBetween(Timestamp.from(dateFrom), Timestamp.from(dateTo))
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesByTransactionType(
+      TransactionType transactionType) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findAllByTransactionType(transactionType)
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesByTransactionSource(
+      TransactionSource transactionSource) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findAllByTransactionSource(transactionSource)
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesByCategoryAndName(
+      ExpenseCategory expenseCategory, ExpenseName expenseName) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findAllByExpenseCategoryAndExpenseName(expenseCategory, expenseName)
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
+  }
+
+  @Override
+  public CompletableFuture<List<ExpMgrExpense>> getExpensesByCategory(
+      ExpenseCategory expenseCategory) {
+    return CompletableFuture.supplyAsync(
+        () ->
+            expenseRepository
+                .findAllByExpenseCategory(expenseCategory)
+                .orElseThrow(ExpenseNotFoundException::new),
+        executor);
   }
 
   private CompletableFuture<ExpMgrExpense> addExpenseToDB(ExpMgrExpense expMgrExpenseUpdated) {
@@ -74,34 +173,5 @@ public class ExpenseManagerImpl implements IExpenseManager {
         expMgrExpense.getClosingBalance() - expMgrExpenseToBeAdded.getTransactionAmount());
     expMgrExpenseUpdated.setOpeningBalance(expMgrExpense.getClosingBalance());
     return expMgrExpenseUpdated;
-  }
-
-  @Override
-  public CompletableFuture<ExpMgrExpense> getExpenseById(Long expenseId) {
-    return CompletableFuture.supplyAsync(() -> expenseRepository.getOne(expenseId), executor);
-  }
-
-  @Override
-  public CompletableFuture<List<ExpMgrExpense>> getAllExpenses() {
-    return CompletableFuture.supplyAsync(() -> expenseRepository.findAll(), executor);
-  }
-
-  @Override
-  public Long updateExpense(ExpMgrExpense expMgrExpense) {
-    return expenseRepository.save(expMgrExpense).getId();
-  }
-
-  @Override
-  public List<Long> updateExpense(List<ExpMgrExpense> expMgrExpenses) {
-    return expenseRepository
-        .saveAll(expMgrExpenses)
-        .parallelStream()
-        .map(expMgrExpense -> expMgrExpense.getId())
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  public Long deleteExpense(ExpMgrExpense expMgrExpense) {
-    return null;
   }
 }

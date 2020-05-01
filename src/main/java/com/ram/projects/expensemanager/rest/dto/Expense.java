@@ -100,7 +100,7 @@ public class Expense {
   }
 
   public Double getClosingBalance() {
-    if (this.closingBalance == null){
+    if (this.closingBalance == null) {
       this.closingBalance = 0D;
     }
     return this.closingBalance;

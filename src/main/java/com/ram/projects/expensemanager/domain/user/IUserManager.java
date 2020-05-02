@@ -8,14 +8,13 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public interface IUserManager {
-    CompletableFuture<ExpMgrUser> addUser(ExpMgrUser expMgrUser);
+  CompletableFuture<ExpMgrUser> addUser(ExpMgrUser expMgrUser);
 
-    CompletableFuture<List<ExpMgrUser>> addUser(List<ExpMgrUser> expMgrUser);
+  CompletableFuture<List<ExpMgrUser>> addUser(List<ExpMgrUser> expMgrUser);
 
-    CompletableFuture<ExpMgrUser> updateUser(ExpMgrUser expMgrUser);
+  CompletableFuture<ExpMgrUser> updateUser(ExpMgrUser expMgrUser);
 
-    CompletableFuture<ExpMgrUser> deleteUser(ExpMgrUser expMgrUser);
+  CompletableFuture<Long> deleteUser(ExpMgrUser expMgrUser);
 
-    CompletableFuture<ExpMgrUser> deleteUser(List<ExpMgrUser> expMgrUser);
-    CompletableFuture<List<ExpMgrUser>> getAllUsers();
+  CompletableFuture<List<ExpMgrUser>> getAllUsers();
 }

@@ -5,6 +5,7 @@ import com.ram.projects.expensemanager.db.repo.UserRepository;
 import com.ram.projects.expensemanager.exception.ExpMgrException;
 import com.ram.projects.expensemanager.exception.PreRequisiteFailedException;
 import com.ram.projects.expensemanager.exception.UserAlreadyExistsException;
+import com.ram.projects.expensemanager.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,17 +17,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Component
-public class UserManager implements IUserManager {
-  private static final Logger LOGGER = LoggerFactory.getLogger(UserManager.class);
+public class UserManagerImpl implements IUserManager {
+  private static final Logger LOG = LoggerFactory.getLogger(UserManagerImpl.class);
+  private static final String LOG_HANDLE = "[UserManager :] ";
   private final UserRepository userRepository;
 
-  public UserManager(UserRepository userRepository) {
+  public UserManagerImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
   public CompletableFuture<ExpMgrUser> addUser(ExpMgrUser expMgrUser) {
-    return CompletableFuture.supplyAsync(() -> filterValidUser(expMgrUser))
+    return CompletableFuture.supplyAsync(() -> validateIfUserNotAlreadyExists(expMgrUser))
         .thenApply(noData -> populateDatesAndComment(expMgrUser))
         .thenApply(userRepository::save)
         .exceptionally(throwable -> handleFailure(throwable, expMgrUser));
@@ -34,9 +36,9 @@ public class UserManager implements IUserManager {
 
   @Override
   public CompletableFuture<List<ExpMgrUser>> addUser(List<ExpMgrUser> expMgrUsers) {
-    return CompletableFuture.supplyAsync(() -> filterValidUser(expMgrUsers))
+    return CompletableFuture.supplyAsync(() -> validateIfUserNotAlreadyExists(expMgrUsers))
         .thenApply(this::populateDatesAndComment)
-        .thenApply(users -> (List<ExpMgrUser>) userRepository.saveAll(users))
+        .thenApply(users -> userRepository.saveAll(users))
         .exceptionally(throwable -> handleFailure(throwable, expMgrUsers));
   }
 
@@ -46,25 +48,30 @@ public class UserManager implements IUserManager {
   }
 
   @Override
-  public CompletableFuture<ExpMgrUser> deleteUser(ExpMgrUser expMgrUserToBeDeleted) {
-    return CompletableFuture.supplyAsync(() -> filterValidUser(expMgrUserToBeDeleted))
-        .thenApply(this::deleteUserFromDB)
-        .exceptionally(throwable -> handleFailure(throwable, expMgrUserToBeDeleted));
+  public CompletableFuture<Long> deleteUser(ExpMgrUser expMgrUserToBeDeleted) {
+    return CompletableFuture.supplyAsync(() -> validateIfUserExists(expMgrUserToBeDeleted))
+        .thenCompose(this::deleteUserFromDB)
+        .exceptionally(
+            throwable -> handleFailureForDeleteUser(throwable, expMgrUserToBeDeleted.getId()));
   }
 
-  private ExpMgrUser deleteUserFromDB(ExpMgrUser expMgrUser) {
-    userRepository.delete(expMgrUser);
-    return expMgrUser;
+  private Long handleFailureForDeleteUser(Throwable throwable, Long userId) {
+    if (throwable instanceof UserNotFoundException) {
+      LOG.error(
+          LOG_HANDLE + "User Id :{}, doesn't exists to delete exception :{} ", userId, throwable);
+      throw (UserNotFoundException) throwable;
+    }
+    return userId;
   }
 
-  @Override
-  public CompletableFuture<ExpMgrUser> deleteUser(List<ExpMgrUser> expMgrUser) {
-    return null;
+  private CompletableFuture<Long> deleteUserFromDB(ExpMgrUser expMgrUser) {
+    return CompletableFuture.runAsync(() -> deleteUserFromDB(expMgrUser))
+        .thenApply(noData -> expMgrUser.getId());
   }
 
   @Override
   public CompletableFuture<List<ExpMgrUser>> getAllUsers() {
-    return CompletableFuture.supplyAsync(() -> (List<ExpMgrUser>) userRepository.findAll());
+    return CompletableFuture.supplyAsync(() -> userRepository.findAll());
   }
 
   private ExpMgrUser populateDatesAndComment(ExpMgrUser expMgrUser) {
@@ -87,18 +94,18 @@ public class UserManager implements IUserManager {
           (UserAlreadyExistsException) throwable.getCause();
       return userAlreadyExistsException.getExistingUser();
     }
-    LOGGER.error("Failed to add User {}, reason {}", expMgrUser, throwable.getMessage());
+    LOG.error("Failed to add User {}, reason {}", expMgrUser, throwable.getMessage());
     throw new ExpMgrException(
         String.format("Failed to add User :{}, reason :{}", expMgrUser, throwable.getMessage()));
   }
 
   private List<ExpMgrUser> handleFailure(Throwable throwable, List<ExpMgrUser> expMgrUsers) {
     String errorMessage = "Failed to add Users {}, reason {}";
-    LOGGER.error(errorMessage, expMgrUsers, throwable.getMessage());
+    LOG.error(errorMessage, expMgrUsers, throwable.getMessage());
     throw new ExpMgrException(String.format(errorMessage, expMgrUsers, throwable.getMessage()));
   }
 
-  private ExpMgrUser filterValidUser(ExpMgrUser expMgrUser) {
+  private ExpMgrUser validateIfUserNotAlreadyExists(ExpMgrUser expMgrUser) {
     validatePreRequisites(expMgrUser);
     userRepository
         .findByFirstNameAndLastNameAndEmail(
@@ -108,14 +115,24 @@ public class UserManager implements IUserManager {
     return expMgrUser;
   }
 
-  private List<ExpMgrUser> filterValidUser(List<ExpMgrUser> expMgrUsers) {
+  private ExpMgrUser validateIfUserExists(ExpMgrUser expMgrUser) {
+    validatePreRequisites(expMgrUser);
+    userRepository
+        .findByFirstNameAndLastNameAndEmail(
+            expMgrUser.getFirstName(), expMgrUser.getLastName(), expMgrUser.geteEmail())
+        .orElseThrow(UserNotFoundException::new);
+
+    return expMgrUser;
+  }
+
+  private List<ExpMgrUser> validateIfUserNotAlreadyExists(List<ExpMgrUser> expMgrUsers) {
     return expMgrUsers.parallelStream().filter(this::hasValidData).collect(Collectors.toList());
   }
 
   private boolean hasValidData(ExpMgrUser expMgrUser) {
     boolean isDataValid;
     try {
-      filterValidUser(expMgrUser);
+      validateIfUserNotAlreadyExists(expMgrUser);
       isDataValid = true;
     } catch (PreRequisiteFailedException requisiteFailedException) {
       isDataValid = false;

@@ -1,0 +1,15 @@
+###1.SignUp###
+{
+  "signIn": {
+    "encryptionKey": "string",
+    "password": "string",
+    "userName": "string"
+  },
+  "user": {
+    "comment": "string",
+    "emailId": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "type": "string"
+  }
+}

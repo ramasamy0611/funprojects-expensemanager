@@ -48,11 +48,6 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: true
-
-  - changeSet:
-      id: expmgr-2
-      author: molair
-      changes:
         - createTable:
             tableName: exp_mgr_expense
             columns:
@@ -103,13 +98,40 @@ databaseChangeLog:
                   type: NUMERIC(18, 2)
                   constraints:
                     nullable: false
-  - changeSet:
-      id: expmgr-3
-      author: molair
-      changes:
+        - createTable:
+            tableName: exp_mgr_signin
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: encryption_key
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
         - addUniqueConstraint:
             columnNames: first_name, last_name, email
             constraintName: UNIQUE_USER
             schemaName: expmgr1
             tableName: exp_mgr_user
+            validate: true
+        - addUniqueConstraint:
+            columnNames: user_name
+            constraintName: UNIQUE_USER_NAME
+            schemaName: expmgr1
+            tableName: exp_mgr_signin
             validate: true

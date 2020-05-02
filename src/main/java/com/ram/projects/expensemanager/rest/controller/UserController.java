@@ -46,7 +46,7 @@ public class UserController {
   }
 
   @PostMapping(path = "/delete", consumes = "application/json", produces = "applicatin/json")
-  public CompletableFuture<ResponseEntity<User>> deleteUser(HttpEntity<User> httpEntity) {
+  public CompletableFuture<ResponseEntity<Long>> deleteUser(HttpEntity<User> httpEntity) {
     return restProcessor.process(
         "Delete User",
         httpEntity,
@@ -54,7 +54,4 @@ public class UserController {
         userOutputConverter,
         expmgrUser -> userManager.deleteUser((ExpMgrUser) expmgrUser));
   }
-  // TODO Remove user
-  // Update user data
-
 }

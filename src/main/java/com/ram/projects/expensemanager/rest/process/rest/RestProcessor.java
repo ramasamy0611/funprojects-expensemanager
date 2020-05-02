@@ -35,7 +35,7 @@ public class RestProcessor<T, R, O, Y> {
     LOGGER.info(
         LOG_HENDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity))
-        .thenCompose(handler)
+        .thenCompose(handler::apply)
         .thenApply(outputConverter::convert)
         .thenApply(this::prepareResponse)
         .thenApply(

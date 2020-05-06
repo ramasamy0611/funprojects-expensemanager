@@ -42,7 +42,7 @@ public class ExpenseController {
   }
 
   @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
-  public CompletableFuture<ResponseEntity<Expense>> addExpense(@RequestBody Expense expense) {
+  public CompletableFuture<ResponseEntity<RestResponse<Long>>> addExpense(@RequestBody Expense expense) {
     return restProcessor.process(
         "Add a new Expense",
         expense,

@@ -1,6 +1,7 @@
 package com.ram.projects.expensemanager.rest.process.rest;
 
 import com.ram.projects.expensemanager.exception.ExpMgrException;
+import com.ram.projects.expensemanager.exception.UserNotFoundException;
 import com.ram.projects.expensemanager.rest.RestResponse;
 import com.ram.projects.expensemanager.rest.converter.Converter;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import static com.ram.projects.expensemanager.common.DateTimeUtils.currentTimeIn
 @Service
 public class RestProcessor<T, R, O, Y> {
   private static final Logger LOGGER = LoggerFactory.getLogger(RestProcessor.class);
-  private static final String LOG_HENDLE = "[RestProcessor :] ";
+  private static final String LOG_HANDLE = "[RestProcessor :] ";
 
   public CompletableFuture<ResponseEntity<RestResponse<T>>> process(
       String apiName,
@@ -33,7 +34,7 @@ public class RestProcessor<T, R, O, Y> {
     Objects.requireNonNull(handler, "Handler cannot null");
 
     LOGGER.info(
-        LOG_HENDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
+        LOG_HANDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity))
         .thenCompose(handler::apply)
         .thenApply(outputConverter::convert)
@@ -41,7 +42,7 @@ public class RestProcessor<T, R, O, Y> {
         .thenApply(
             respData -> {
               LOGGER.info(
-                  LOG_HENDLE + "api invoked - END :{} timestamp :{}",
+                  LOG_HANDLE + "api invoked - END :{} timestamp :{}",
                   apiName,
                   currentTimeInstant());
               return respData;
@@ -56,7 +57,7 @@ public class RestProcessor<T, R, O, Y> {
     Objects.requireNonNull(handler, "Handler cannot null");
 
     LOGGER.info(
-        LOG_HENDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
+        LOG_HANDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
     return handler
         .apply(null)
         .thenApply(outputConverter::convert)
@@ -65,7 +66,7 @@ public class RestProcessor<T, R, O, Y> {
         .thenApply(
             respData -> {
               LOGGER.info(
-                  LOG_HENDLE + "api invoked - END :{} timestamp :{}",
+                  LOG_HANDLE + "api invoked - END :{} timestamp :{}",
                   apiName,
                   currentTimeInstant());
               return respData;
@@ -86,7 +87,7 @@ public class RestProcessor<T, R, O, Y> {
     Objects.requireNonNull(inputEntity, "Handler cannot null");
 
     LOGGER.info(
-        LOG_HENDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
+        LOG_HANDLE + "api invoked - START :{} timestamp :{}", apiName, currentTimeInstant());
     return CompletableFuture.completedFuture(inputConverter.convert(inputEntity.getBody()))
         .thenCompose(handler)
         .thenApply(outputConverter::convert)
@@ -94,7 +95,7 @@ public class RestProcessor<T, R, O, Y> {
         .thenApply(
             respData -> {
               LOGGER.info(
-                  LOG_HENDLE + "api invoked - END :{} timestamp :{}",
+                  LOG_HANDLE + "api invoked - END :{} timestamp :{}",
                   apiName,
                   currentTimeInstant());
               return respData;
@@ -103,7 +104,10 @@ public class RestProcessor<T, R, O, Y> {
   }
 
   private ResponseEntity<RestResponse<T>> prepareResponse(Throwable throwable) {
-    LOGGER.error(LOG_HENDLE + " something went wrong :", throwable);
+    LOGGER.error(LOG_HANDLE + " something went wrong :", throwable);
+    if (throwable.getCause() instanceof UserNotFoundException){
+        return null;//fixme
+    }
     String message =
         throwable.getCause() instanceof ExpMgrException
             ? ((ExpMgrException) throwable.getCause()).getExpMgrExceptionMessage()

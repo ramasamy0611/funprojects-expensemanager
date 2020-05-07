@@ -1,0 +1,23 @@
+server:
+  port: 1111
+
+###database###
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/expmgr
+    username: expmgr1
+    password: expmgr1
+    hikari:
+      schema: expmgr1
+    driver-class-name: org.postgresql.Driver
+
+
+  ###logging###
+  #org.springframework.boot.logging.LoggingSystem=Logback
+  logging.file.path=/var/opt/apps/expensemanager/logs/application.log
+  logging.level.root=info
+  logging.leve..org.liquibase=trace
+  logging.level.com.ram.projects.expensemanager=debug
+
+  -Dagentlib=jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+

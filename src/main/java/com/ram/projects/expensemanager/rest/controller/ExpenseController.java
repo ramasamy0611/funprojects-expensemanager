@@ -4,7 +4,6 @@ import com.ram.projects.expensemanager.db.entity.ExpMgrExpense;
 import com.ram.projects.expensemanager.domain.expense.IExpenseManager;
 import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
 import com.ram.projects.expensemanager.domain.expense.constants.ExpenseName;
-import com.ram.projects.expensemanager.rest.RestResponse;
 import com.ram.projects.expensemanager.rest.converter.ExpenseInputConverter;
 import com.ram.projects.expensemanager.rest.converter.ExpenseOutputConverter;
 import com.ram.projects.expensemanager.rest.converter.ExpensesOutputConverter;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,7 +42,7 @@ public class ExpenseController {
   }
 
   @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
-  public CompletableFuture<ResponseEntity<RestResponse<Long>>> addExpense(@RequestBody Expense expense) {
+  public CompletableFuture<ResponseEntity<Long>> addExpense(@RequestBody Expense expense) {
     return restProcessor.process(
         "Add a new Expense",
         expense,
@@ -52,14 +52,16 @@ public class ExpenseController {
   }
 
   @GetMapping(path = "/getAllExpenses", produces = "application/json")
-  public CompletableFuture<ResponseEntity<RestResponse<List<Expense>>>> getAllExpenses() {
+  public CompletableFuture<ResponseEntity<List<Expense>>> getAllExpenses() {
     return restProcessor.process(
         "Fetch all expenses",
         expensesOutputConverter,
         expMgrExpense -> iExpenseManager.getAllExpenses());
   }
 
-  @GetMapping(path = "/getAllExpensesBetweenDates/{fromDate}/{toDate}", produces = "application/json")
+  @GetMapping(
+      path = "/getAllExpensesBetweenDates/{fromDate}/{toDate}",
+      produces = "application/json")
   public CompletableFuture<ResponseEntity<List<Expense>>> getExpensesBetweenTransactionDates(
       @PathVariable("fromDate") Instant fromDate, @PathVariable("toDate") Instant toDate) {
     return restProcessor.process(
@@ -68,8 +70,8 @@ public class ExpenseController {
         expMgrExpense -> iExpenseManager.getExpensesBetweenTransactionDates(fromDate, toDate));
   }
 
-  @GetMapping(path = "/getAllExpensesByDate/{aDate}", produces = "application/json")
-  public CompletableFuture<ResponseEntity<List<Expense>>> getExpensesByTransactionDate(
+  @GetMapping(path = "/getAllExpensesByInstant/{aDate}", produces = "application/json")
+  public CompletableFuture<List<Expense>> getExpensesByTransactionInstant(
       @PathVariable("aDate") Instant aDate) {
     return restProcessor.process(
         "getExpensesByTransactionDate",
@@ -77,8 +79,17 @@ public class ExpenseController {
         expMgrExpense -> iExpenseManager.getExpensesByTransactionDate(aDate));
   }
 
+  @GetMapping(path = "/getAllExpensesByDate/{aDate}", produces = "application/json")
+  public CompletableFuture<List<Expense>> getExpensesByTransactionDate(
+      @PathVariable("aDate") Date aDate) {
+    return restProcessor.process(
+        "getExpensesByTransactionDate",
+        expensesOutputConverter,
+        expMgrExpense -> iExpenseManager.getExpensesByTransactionDate(aDate.toInstant()));
+  }
+
   @GetMapping(path = "/getAllExpensesByCategory/{expenseCategory}", produces = "application/json")
-  public CompletableFuture<ResponseEntity<List<Expense>>> getExpensesByCategory(
+  public CompletableFuture<List<Expense>> getExpensesByCategory(
       @PathVariable("expenseCategory") ExpenseCategory expenseCategory) {
     return restProcessor.process(
         "Fetch all expenses by ExpenseCategory",
@@ -89,7 +100,7 @@ public class ExpenseController {
   @GetMapping(
       path = "/getAllExpenses/{expenseCategory}/{expenseName}",
       produces = "application/json")
-  public CompletableFuture<ResponseEntity<List<Expense>>> getExpensesByCategoryAndName(
+  public CompletableFuture<List<Expense>> getExpensesByCategoryAndName(
       @PathVariable("expenseCategory") ExpenseCategory expenseCategory,
       @PathVariable("expenseName") ExpenseName expenseName) {
     return restProcessor.process(

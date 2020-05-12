@@ -41,7 +41,7 @@ public class SignInController {
   }
 
   @PostMapping(path = "/signIn", consumes = "application/json", produces = "application/json")
-  public CompletableFuture<ResponseEntity<RestResponse<SignIn>>> singIn(
+  public CompletableFuture<ResponseEntity<SignIn>> singIn(
       @RequestBody SignIn signIn) {
     return restProcessor.process(
         "singIn",
@@ -52,7 +52,7 @@ public class SignInController {
   }
 
   @PostMapping(path = "/signUp", consumes = "application/json", produces = "application/json")
-  public CompletableFuture<ResponseEntity<RestResponse<String>>> singUp(
+  public CompletableFuture<ResponseEntity<String>> singUp(
       @RequestBody SignUp signUp) {
     return restProcessor.process(
         "singUp",

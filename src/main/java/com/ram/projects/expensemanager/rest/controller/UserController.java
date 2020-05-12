@@ -36,7 +36,7 @@ public class UserController {
   }
 
   @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
-  public CompletableFuture<ResponseEntity<User>> addUser(HttpEntity<User> httpEntity) {
+  public CompletableFuture<User> addUser(HttpEntity<User> httpEntity) {
     return restProcessor.process(
         "Add a new User",
         httpEntity,
@@ -46,7 +46,7 @@ public class UserController {
   }
 
   @PostMapping(path = "/delete", consumes = "application/json", produces = "applicatin/json")
-  public CompletableFuture<ResponseEntity<Long>> deleteUser(HttpEntity<User> httpEntity) {
+  public CompletableFuture<Long> deleteUser(HttpEntity<User> httpEntity) {
     return restProcessor.process(
         "Delete User",
         httpEntity,

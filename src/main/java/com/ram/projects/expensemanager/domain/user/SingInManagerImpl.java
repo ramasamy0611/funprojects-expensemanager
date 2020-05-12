@@ -30,7 +30,7 @@ public class SingInManagerImpl implements ISingInManager {
   @Override
   public CompletableFuture<String> signUp(ExpMgrSignUp expMgrSignUp) {
     return CompletableFuture.runAsync(
-            () -> validateSignInExistenseByUserName(expMgrSignUp.getExpMgrSignIn().getUserName()))
+            () -> validateSignInExistenceByUserName(expMgrSignUp.getExpMgrSignIn().getUserName()))
         .thenAccept(noData -> registerUser(expMgrSignUp.getExpMgrUser()))
         .thenApply(noData -> encryptPasswordAndSaveSignIn(expMgrSignUp.getExpMgrSignIn()));
   }
@@ -45,7 +45,7 @@ public class SingInManagerImpl implements ISingInManager {
         new ExpMgrSignIn(
             expMgrSignIn.getUserName(), encryptedPassword, expMgrSignIn.getEncryptionKey());
     String userName = signInRepository.save(expMgrSignInToBeSaved).getUserName();
-    return "Congratulation!! User profile created with login name ".concat(userName);
+    return userName;
   }
 
   private ExpMgrSignIn findUserByUserNameAndPassword(ExpMgrSignIn signIn) {
@@ -53,7 +53,7 @@ public class SingInManagerImpl implements ISingInManager {
     return signInRepository
         .findByUserNameAndPasswordAndEncryptionKey(
             signIn.getUserName(), decryptedPassword, signIn.getEncryptionKey())
-        .orElseThrow(() -> new UserSignInNotFoundException());
+        .orElseThrow(UserSignInNotFoundException::new);
   }
 
   private String getPassword(ExpMgrSignIn signIn) {
@@ -63,9 +63,9 @@ public class SingInManagerImpl implements ISingInManager {
     return hashOfKey + signIn.getUserName() + hashOfPassword;
   }
 
-  private void validateSignInExistenseByUserName(String userName) {
+  private void validateSignInExistenceByUserName(String userName) {
     Optional<ExpMgrSignIn> expMgrSignInOptional = signInRepository.findByUserName(userName);
-    if (!expMgrSignInOptional.isEmpty()) {
+    if (!expMgrSignInOptional.isPresent()) {
       throw new UserNameExistsException();
     }
   }

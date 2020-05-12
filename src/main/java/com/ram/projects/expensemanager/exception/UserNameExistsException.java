@@ -9,6 +9,6 @@ public class UserNameExistsException extends ExpMgrException{
         super(message);
     }
     public UserNameExistsException() {
-        super("UserName not available for use, create another one");
+        super("UserName not available for use, consider another one");
     }
 }

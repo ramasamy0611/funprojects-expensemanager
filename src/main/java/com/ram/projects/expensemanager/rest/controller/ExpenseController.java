@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -82,10 +84,16 @@ public class ExpenseController {
   @GetMapping(path = "/getAllExpensesByDate/{aDate}", produces = "application/json")
   public CompletableFuture<List<Expense>> getExpensesByTransactionDate(
       @PathVariable("aDate") Date aDate) {
+    Instant instant =
+        new java.sql.Date(aDate.getTime())
+            .toLocalDate()
+            .atStartOfDay()
+            .truncatedTo(ChronoUnit.DAYS)
+            .toInstant(ZoneOffset.UTC);
     return restProcessor.process(
         "getExpensesByTransactionDate",
         expensesOutputConverter,
-        expMgrExpense -> iExpenseManager.getExpensesByTransactionDate(aDate.toInstant()));
+        expMgrExpense -> iExpenseManager.getExpensesByTransactionDate(instant));
   }
 
   @GetMapping(path = "/getAllExpensesByCategory/{expenseCategory}", produces = "application/json")

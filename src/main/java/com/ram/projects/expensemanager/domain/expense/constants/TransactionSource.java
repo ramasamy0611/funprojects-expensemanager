@@ -6,5 +6,6 @@ public enum TransactionSource {
   UPI,
   NET_BANKING,
   PAY_TM,
-  GOOGLE_PAY
+  GOOGLE_PAY,
+  CASH
 }

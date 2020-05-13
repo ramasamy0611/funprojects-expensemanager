@@ -5,6 +5,7 @@ import com.ram.projects.expensemanager.rest.dto.Expense;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.temporal.ChronoUnit;
 
 @Component
 public class ExpenseInputConverter implements Converter<Expense, ExpMgrExpense> {
@@ -16,7 +17,8 @@ public class ExpenseInputConverter implements Converter<Expense, ExpMgrExpense> 
     expMgrExpense.setExpenseName(expenseToBeAdded.getExpenseName());
     expMgrExpense.setClosingBalance(expenseToBeAdded.getClosingBalance());
     expMgrExpense.setTransactionAmount(expenseToBeAdded.getTransactionAmount());
-    expMgrExpense.setTransactionDate(Timestamp.from(expenseToBeAdded.getTransactionDate()));
+    expMgrExpense.setTransactionDate(
+        Timestamp.from(expenseToBeAdded.getTransactionDate().truncatedTo(ChronoUnit.DAYS)));
     expMgrExpense.setTransactionType(expenseToBeAdded.getTransactionType());
     expMgrExpense.setTransactionSource(expenseToBeAdded.getTransactionSource());
     return expMgrExpense;

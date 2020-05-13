@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -69,12 +68,12 @@ public class ExpenseManagerImpl implements IExpenseManager {
 
   @Override
   public CompletableFuture<List<ExpMgrExpense>> getExpensesByTransactionDate(Instant instant) {
-    LOG.debug("getExpensesByTransactionDate date instant :{}",instant);
-    Instant instantWithNoTime = instant.truncatedTo(ChronoUnit.DAYS);
+    LOG.debug("getExpensesByTransactionDate date instant :{}", instant);
     return CompletableFuture.supplyAsync(
         () ->
             expenseRepository
-                .findAllByTransactionDateBetween(Timestamp.from(instantWithNoTime), Timestamp.from(instant))
+                .findAllByTransactionDateBetween(
+                    Timestamp.from(instant), Timestamp.from(instant))
                 .orElseThrow(ExpenseNotFoundException::new),
         executor);
   }

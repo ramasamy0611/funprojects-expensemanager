@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Locale;
 
 public class DateTimeUtils {
@@ -29,5 +32,13 @@ public class DateTimeUtils {
                     zoneId.toString(),
                     zoneId.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
                     Instant.now(Clock.system(zoneId))));
+  }
+
+  public static Instant utilDateToInstantWithoutTime(Date date) {
+    return new java.sql.Date(date.getTime())
+        .toLocalDate()
+        .atStartOfDay()
+        .truncatedTo(ChronoUnit.DAYS)
+        .toInstant(ZoneOffset.UTC);
   }
 }

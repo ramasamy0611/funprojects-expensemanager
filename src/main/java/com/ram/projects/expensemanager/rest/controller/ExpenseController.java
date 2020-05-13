@@ -13,13 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.ram.projects.expensemanager.common.Constants.ROOT_END_POINT;
+import static com.ram.projects.expensemanager.common.DateTimeUtils.utilDateToInstantWithoutTime;
 
 @RestController
 @RequestMapping(ROOT_END_POINT + "/expense")
@@ -65,11 +64,13 @@ public class ExpenseController {
       path = "/getAllExpensesBetweenDates/{fromDate}/{toDate}",
       produces = "application/json")
   public CompletableFuture<ResponseEntity<List<Expense>>> getExpensesBetweenTransactionDates(
-      @PathVariable("fromDate") Instant fromDate, @PathVariable("toDate") Instant toDate) {
+      @PathVariable("fromDate") Date fromDate, @PathVariable("toDate") Date toDate) {
     return restProcessor.process(
         "getExpensesBetweenTransactionDates",
         expensesOutputConverter,
-        expMgrExpense -> iExpenseManager.getExpensesBetweenTransactionDates(fromDate, toDate));
+        expMgrExpense ->
+            iExpenseManager.getExpensesBetweenTransactionDates(
+                utilDateToInstantWithoutTime(fromDate), utilDateToInstantWithoutTime(toDate)));
   }
 
   @GetMapping(path = "/getAllExpensesByInstant/{aDate}", produces = "application/json")
@@ -84,16 +85,11 @@ public class ExpenseController {
   @GetMapping(path = "/getAllExpensesByDate/{aDate}", produces = "application/json")
   public CompletableFuture<List<Expense>> getExpensesByTransactionDate(
       @PathVariable("aDate") Date aDate) {
-    Instant instant =
-        new java.sql.Date(aDate.getTime())
-            .toLocalDate()
-            .atStartOfDay()
-            .truncatedTo(ChronoUnit.DAYS)
-            .toInstant(ZoneOffset.UTC);
     return restProcessor.process(
         "getExpensesByTransactionDate",
         expensesOutputConverter,
-        expMgrExpense -> iExpenseManager.getExpensesByTransactionDate(instant));
+        expMgrExpense ->
+            iExpenseManager.getExpensesByTransactionDate(utilDateToInstantWithoutTime(aDate)));
   }
 
   @GetMapping(path = "/getAllExpensesByCategory/{expenseCategory}", produces = "application/json")

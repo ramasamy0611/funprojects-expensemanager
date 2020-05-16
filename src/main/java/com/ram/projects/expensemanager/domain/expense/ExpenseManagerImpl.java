@@ -40,6 +40,13 @@ public class ExpenseManagerImpl implements IExpenseManager {
   }
 
   @Override
+  public CompletableFuture<ExpMgrExpense> addGetExpense(ExpMgrExpense expMgrExpense) {
+    LOG.debug(LOG_HANDLE + "Expense data to be added :{}", expMgrExpense);
+    return populateClosingAndOpeningBalanceFromLatest(expMgrExpense)
+        .thenCompose(expMgrExpenseUpdated -> addExpenseToDB(expMgrExpenseUpdated));
+  }
+
+  @Override
   public CompletableFuture<List<Long>> addExpense(List<ExpMgrExpense> expMgrExpensesToBeAdded) {
     return addExpenses(expMgrExpensesToBeAdded)
         .thenApply(expMgrExpenses -> extractExpenseIds(expMgrExpenses));
@@ -72,8 +79,7 @@ public class ExpenseManagerImpl implements IExpenseManager {
     return CompletableFuture.supplyAsync(
         () ->
             expenseRepository
-                .findAllByTransactionDateBetween(
-                    Timestamp.from(instant), Timestamp.from(instant))
+                .findAllByTransactionDateBetween(Timestamp.from(instant), Timestamp.from(instant))
                 .orElseThrow(ExpenseNotFoundException::new),
         executor);
   }

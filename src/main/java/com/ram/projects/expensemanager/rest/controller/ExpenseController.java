@@ -6,6 +6,7 @@ import com.ram.projects.expensemanager.domain.expense.constants.ExpenseCategory;
 import com.ram.projects.expensemanager.domain.expense.constants.ExpenseName;
 import com.ram.projects.expensemanager.rest.converter.ExpenseInputConverter;
 import com.ram.projects.expensemanager.rest.converter.ExpenseOutputConverter;
+import com.ram.projects.expensemanager.rest.converter.ExpenseOutputConverterWithExpense;
 import com.ram.projects.expensemanager.rest.converter.ExpensesOutputConverter;
 import com.ram.projects.expensemanager.rest.dto.Expense;
 import com.ram.projects.expensemanager.rest.process.rest.RestProcessor;
@@ -27,6 +28,7 @@ public class ExpenseController {
   private final IExpenseManager iExpenseManager;
   private final ExpenseInputConverter expenseInputConverter;
   private final ExpenseOutputConverter expenseOutputConverter;
+  private final ExpenseOutputConverterWithExpense expenseOutputConverterWithExpense;
   private final ExpensesOutputConverter expensesOutputConverter;
 
   public ExpenseController(
@@ -34,11 +36,13 @@ public class ExpenseController {
       RestProcessor restProcessor,
       ExpenseInputConverter expenseInputConverter,
       ExpenseOutputConverter expenseOutputConverter,
+      ExpenseOutputConverterWithExpense expenseOutputConverterWithExpense,
       ExpensesOutputConverter expensesOutputConverter) {
     this.iExpenseManager = iExpenseManager;
     this.restProcessor = restProcessor;
     this.expenseInputConverter = expenseInputConverter;
     this.expenseOutputConverter = expenseOutputConverter;
+    this.expenseOutputConverterWithExpense = expenseOutputConverterWithExpense;
     this.expensesOutputConverter = expensesOutputConverter;
   }
 
@@ -50,6 +54,17 @@ public class ExpenseController {
         expenseInputConverter,
         expenseOutputConverter,
         expmgrExpense -> iExpenseManager.addExpense((ExpMgrExpense) expmgrExpense));
+  }
+
+  @PostMapping(path = "/addget", consumes = "application/json", produces = "application/json")
+  public CompletableFuture<ResponseEntity<Expense>> addAndReturnExpense(
+      @RequestBody Expense expense) {
+    return restProcessor.process(
+        "Add a new Expense",
+        expense,
+        expenseInputConverter,
+        expenseOutputConverterWithExpense,
+        expmgrExpense -> iExpenseManager.addGetExpense((ExpMgrExpense) expmgrExpense));
   }
 
   @GetMapping(path = "/getAllExpenses", produces = "application/json")

@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface IExpenseManager {
   CompletableFuture<Long> addExpense(ExpMgrExpense expMgrExpense);
+  CompletableFuture<ExpMgrExpense> addGetExpense(ExpMgrExpense expMgrExpense);
 
   CompletableFuture<List<Long>> addExpense(List<ExpMgrExpense> expMgrExpense);
 

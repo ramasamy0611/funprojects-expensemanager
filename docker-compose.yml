@@ -1,11 +1,31 @@
 version: '3.5'
 services:
-  expensemanager:
-    container_name: expensemanager
-    image: expensemanager:snapshot
-    restart: always
+  expmgr-backend:
+    container_name: expmgr-backend
+    image: docker.io/library/expensemanager:0-SNAPSHOT
     ports:
-      - "1111:1111"
+      - "1111:1101"
+    networks:
+      - expmgr
+    depends_on:
+      - postgres
+    restart: always
+  central-cnfig:
+    container_name: central-cnfig
+    image: docker.io/library/central-config-server:0-SNAPSHOT
+    ports:
+      - "1113:1103"
+    networks:
+      - expmgr
+    restart: always
+  expmgr-frontend:
+    container_name: expmgr-frontend
+    image: expmgr-frontend:0-SNAPSHOT
+    ports:
+      - "4200:4201"
+    networks:
+      - expmgr
+    restart: always
 
   postgres:
     container_name: postgres
@@ -15,14 +35,14 @@ services:
       POSTGRES_PASSWORD: postgres
       PGDATA: /data/postgres
     volumes:
-       - postgres:/data/postgres
+      - postgres:/data/postgres
     ports:
       - "5432:5432"
     networks:
-      - postgres
-    restart: unless-stopped
+      - expmgr
+    restart: always
 
-#ref -> https://github.com/khezen/compose-postgres
+  #ref -> https://github.com/khezen/compose-postgres
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -30,17 +50,45 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     volumes:
-       - pgadmin:/root/.pgadmin
+      - pgadmin:/root/.pgadmin
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      - postgres
-    restart: unless-stopped
+      - expmgr
+    restart: always
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.2.0"
+    container_name: elastic-search
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "discovery.type=single-node"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: "docker.elastic.co/kibana/kibana:7.2.0"
+    container_name: kibana
+    ports:
+      - "5601:5601"
+
+  filebeat:
+    image: "docker.elastic.co/beats/filebeat:7.2.0"
+    container_name: filebeat
+    user: root
+    #command: chmod a+rwx /usr/share/filebeat/filebeat.yml
+    volumes:
+      - /home/ram/repo/github/funprojects-expensemanager/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
-  postgres:
+  expmgr:
     driver: bridge
 
 volumes:
   postgres:
   pgadmin:
+  elasticsearch_data:

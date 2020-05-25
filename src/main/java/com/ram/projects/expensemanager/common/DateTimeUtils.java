@@ -38,7 +38,7 @@ public class DateTimeUtils {
     return new java.sql.Date(date.getTime())
         .toLocalDate()
         .atStartOfDay()
-        .truncatedTo(ChronoUnit.DAYS)
+        .truncatedTo(ChronoUnit.HOURS)
         .toInstant(ZoneOffset.UTC);
   }
 }

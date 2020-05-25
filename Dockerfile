@@ -1,8 +1,13 @@
-FROM adoptopenjdk/openjdk14-openj9
-ARG WORKING_DIR=/var/opt/apps/expensemanager
-CMD mkdir $WORKING_DIR
+
+FROM adoptopenjdk:11-jre-hotspot as builder
+WORKDIR application
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} $WORKING_DIR/expenseManagerApp.jar
-EXPOSE 1111 1111
-#ENTRYPOINT ["ping","localhost"]
-ENTRYPOINT ["java","-jar","/var/opt/apps/expensemanager/expenseManagerApp.jar"]
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+FROM adoptopenjdk:11-jre-hotspot
+WORKDIR application
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/application/ ./
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

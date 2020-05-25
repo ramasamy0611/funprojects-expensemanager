@@ -18,7 +18,7 @@ public class ExpenseInputConverter implements Converter<Expense, ExpMgrExpense> 
     expMgrExpense.setClosingBalance(expenseToBeAdded.getClosingBalance());
     expMgrExpense.setTransactionAmount(expenseToBeAdded.getTransactionAmount());
     expMgrExpense.setTransactionDate(
-        Timestamp.from(expenseToBeAdded.getTransactionDate().truncatedTo(ChronoUnit.DAYS)));
+        Timestamp.from(expenseToBeAdded.getTransactionDate().truncatedTo(ChronoUnit.HOURS)));
     expMgrExpense.setTransactionType(expenseToBeAdded.getTransactionType());
     expMgrExpense.setTransactionSource(expenseToBeAdded.getTransactionSource());
     return expMgrExpense;

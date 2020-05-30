@@ -10,6 +10,7 @@ import com.ram.projects.expensemanager.exception.ExpenseNotFoundException;
 import com.ram.projects.expensemanager.rest.process.rest.RestProcessorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -27,16 +28,16 @@ public class ExpenseManagerImpl implements IExpenseManager {
   private ExpenseRepository expenseRepository;
   private Executor executor = RestProcessorUtil.getExecutor();
 
-  public ExpenseManagerImpl(ExpenseRepository expenseRepository) {
-    this.expenseRepository = expenseRepository;
-  }
-
+  @Cacheable(cacheNames = "expense-cache")
   @Override
   public CompletableFuture<Long> addExpense(ExpMgrExpense expMgrExpenseToBoAdded) {
     LOG.debug(LOG_HANDLE + "Expense data to be added :{}", expMgrExpenseToBoAdded);
     return populateClosingAndOpeningBalanceFromLatest(expMgrExpenseToBoAdded)
-        .thenCompose(expMgrExpenseUpdated -> addExpenseToDB(expMgrExpenseUpdated))
-        .thenApply(expMgrExpense -> expMgrExpense.getId());
+            .thenCompose(expMgrExpenseUpdated -> addExpenseToDB(expMgrExpenseUpdated))
+            .thenApply(expMgrExpense -> expMgrExpense.getId());
+  }
+  public ExpenseManagerImpl(ExpenseRepository expenseRepository) {
+    this.expenseRepository = expenseRepository;
   }
 
   @Override
@@ -67,9 +68,10 @@ public class ExpenseManagerImpl implements IExpenseManager {
   public CompletableFuture<ExpMgrExpense> getExpenseById(Long expenseId) {
     return CompletableFuture.supplyAsync(() -> expenseRepository.getOne(expenseId), executor);
   }
-
+  @Cacheable(cacheNames = "expenseall-cache")
   @Override
   public CompletableFuture<List<ExpMgrExpense>> getAllExpenses() {
+    LOG.debug("Fetching from DB!");
     return CompletableFuture.supplyAsync(() -> expenseRepository.findAll(), executor);
   }
 

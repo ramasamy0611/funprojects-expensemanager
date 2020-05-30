@@ -21,6 +21,7 @@
         <liquibase.version>3.8.5</liquibase.version>
         <swagger.version>2.9.2</swagger.version>
         <spring-cloud-starter-config.version>2.2.2.RELEASE</spring-cloud-starter-config.version>
+        <ehcache3.version>3.8.1</ehcache3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -109,6 +110,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+        <!--EhCache-->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache-clustered</artifactId>
+            <version>${ehcache3.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

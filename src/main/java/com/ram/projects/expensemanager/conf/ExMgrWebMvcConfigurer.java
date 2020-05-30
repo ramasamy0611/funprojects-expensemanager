@@ -12,7 +12,7 @@ public class ExMgrWebMvcConfigurer implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping(ROOT_END_POINT.concat("/**"))
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("http://localhost:4200","http://expmgr-frontend:4200")
                 .allowedHeaders("Content-Type", "Access-Control-Allow-Methods", "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
                 .allowedMethods("*");
     }

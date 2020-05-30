@@ -28,7 +28,7 @@ public class ExpenseManagerImpl implements IExpenseManager {
   private ExpenseRepository expenseRepository;
   private Executor executor = RestProcessorUtil.getExecutor();
 
-  @Cacheable(cacheNames = "expense-cache")
+  @Cacheable(cacheNames = "expenseall-cache")
   @Override
   public CompletableFuture<Long> addExpense(ExpMgrExpense expMgrExpenseToBoAdded) {
     LOG.debug(LOG_HANDLE + "Expense data to be added :{}", expMgrExpenseToBoAdded);

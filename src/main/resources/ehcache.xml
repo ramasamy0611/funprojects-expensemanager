@@ -4,14 +4,15 @@
   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
   xmlns:terracotta='http://www.ehcache.org/v3/clustered'
   xmlns:ehcache='http://www.ehcache.org/v3'
-  xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd
-    http://www.ehcache.org/v3/clustered http://www.ehcache.org/schema/ehcache-clustered-ext-3.1.xsd">
+  xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.8.xsd
+    http://www.ehcache.org/v3/clustered http://www.ehcache.org/schema/ehcache-clustered-ext-3.8.xsd">
 
   <ehcache:service>
     <terracotta:cluster>
       <terracotta:connection url="terracotta://localhost:9410/clustered"/>
       <terracotta:server-side-config auto-create="true">
-        <terracotta:default-resource from="default-resource"/>
+          <!--<terracotta:default-resource from="default-resource"/>-->
+          <terracotta:shared-pool name="shared-pool-expense" unit="MB">100</terracotta:shared-pool>
       </terracotta:server-side-config>
     </terracotta:cluster>
  </ehcache:service>
@@ -22,8 +23,10 @@
     <ehcache:resources>
      <!-- <ehcache:heap unit="entries">100</ehcache:heap>
       <ehcache:offheap unit="MB">1</ehcache:offheap>-->
-      <terracotta:clustered-dedicated unit="MB">10</terracotta:clustered-dedicated>
+      <!--<terracotta:clustered-dedicated unit="MB">10</terracotta:clustered-dedicated>-->
+        <terracotta:clustered-shared sharing="shared-pool-expense"></terracotta:clustered-shared>
     </ehcache:resources>
+      <terracotta:clustered-store consistency="strong"/>
   </ehcache:cache>
   <ehcache:cache alias="expense-cache">
     <ehcache:key-type>java.lang.String</ehcache:key-type>

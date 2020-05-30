@@ -10,7 +10,16 @@ services:
     depends_on:
       - postgres
     restart: always
-
+  expmgr-backend2:
+    container_name: expmgr-backend2
+    image: docker.io/library/expmgr-backend:0-SNAPSHOT
+    ports:
+      - "1111:1101"
+    networks:
+      - expmgr
+    depends_on:
+      - postgres
+    restart: always
   expmgr-frontend:
     container_name: expmgr-frontend
     image: expmgr-frontend:0-SNAPSHOT

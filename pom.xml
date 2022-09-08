@@ -17,7 +17,7 @@
 
     <properties>
         <spring.boot.version>2.3.0.RELEASE</spring.boot.version>
-        <postgres.version>42.2.12</postgres.version>
+        <postgres.version>42.4.1</postgres.version>
         <liquibase.version>3.8.5</liquibase.version>
         <swagger.version>2.9.2</swagger.version>
         <spring-cloud-starter-config.version>2.2.2.RELEASE</spring-cloud-starter-config.version>
